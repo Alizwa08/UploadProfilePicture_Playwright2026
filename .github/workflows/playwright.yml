@@ -4,10 +4,17 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  schedule:
+    - cron: '0 22 * * *'   # 22:00 UTC = 00:00 SAST (South Africa is UTC+2, no daylight saving)
+  workflow_dispatch:        # lets you manually trigger a run from the GitHub Actions tab
+
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      NDOSI_EMAIL: ${{ secrets.NDOSI_EMAIL }}
+      NDOSI_PASSWORD: ${{ secrets.NDOSI_PASSWORD }}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
